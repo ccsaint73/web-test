@@ -70,3 +70,50 @@ export const getImageExtHistory = () => {
     })
 }
 
+// 
+export const handleTxt2Img = (params) => {
+
+    return new Promise((resolve, reject) => {
+        getTicketDetail(params).then((response) => {
+            const ticket = response.data.ticket
+            const signature = response.data.signature
+            const app_id = response.data.app_id
+
+            const suffix = `ticket=${ticket}&signature=${signature}&app_id=${app_id}`
+
+            post(`${baseUrl}/txt2img/add?${suffix}`, params).then((res) => resolve(res))
+        })
+    })
+}
+
+
+// 获取历史记录
+export const getTxt2ImgHistory = () => {
+
+    return new Promise((resolve, reject) => {
+        getTicketDetail(params).then((response) => {
+            const ticket = response.data.ticket
+            const signature = response.data.signature
+            const app_id = response.data.app_id
+
+            const suffix = `ticket=${ticket}&signature=${signature}&app_id=${app_id}`
+
+            get(`${baseUrl}/txt2img/_search?orderBy=createTime desc&${suffix}`).then(res => resolve(res))
+        })
+    })
+}
+
+export const getTxt2ImgProgress = (id, taskId) => {
+
+    return new Promise((resolve, reject) => {
+        getTicketDetail(params).then((response) => {
+            const ticket = response.data.ticket
+            const signature = response.data.signature
+            const app_id = response.data.app_id
+
+            const suffix = `ticket=${ticket}&signature=${signature}&app_id=${app_id}`
+
+            get(`${baseUrl}/txt2img/getResult?taskId=${taskId}&id=${id}&${suffix}`).then((res) => resolve(res))
+        })
+    })
+}

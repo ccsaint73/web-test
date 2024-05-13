@@ -8,7 +8,10 @@
 
                 <template v-else>
                     <template v-if="formatImgResults(currentImage)">
-                        <BjyAiCanvasPane :currentImgResults="formatImgResults(currentImage)" />
+                        <BjyAiCanvasPane
+                            :currentImgResults="formatImgResults(currentImage)"
+                            :extend="extend"
+                        />
                     </template>
 
                     <BjyAiLoading v-else title="生成中，预计需要1-3分钟左右" />
@@ -35,6 +38,10 @@ export default {
             type: Object,
             default: () => ({}),
         },
+        extend: {
+            type: Boolean,
+            default: false,
+        },
     },
     data() {
         return {}
@@ -49,9 +56,13 @@ export default {
                     try {
                         const results = JSON.parse(json)
 
-                        return Array.isArray(results) && results.length > 0
-                            ? [imgUrl, ...results]
-                            : false
+                        if (this.extend) {
+                            return Array.isArray(results) && results.length > 0
+                                ? [imgUrl, ...results]
+                                : false
+                        } else {
+                            return Array.isArray(results) && results.length > 0 ? results : false
+                        }
                     } catch (error) {
                         return false
                     }

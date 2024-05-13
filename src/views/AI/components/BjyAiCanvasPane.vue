@@ -33,6 +33,10 @@ export default {
             type: Array,
             default: () => [],
         },
+        extend: {
+            type: Boolean,
+            default: false,
+        },
     },
     data() {
         return {
@@ -103,8 +107,16 @@ export default {
         },
         currentImgResults: {
             handler(val) {
-                if (val.length > 1) {
-                    this.currentImg = this.currentImgResults[1]
+                console.log(this.extend)
+
+                if (this.extend) {
+                    if (val.length > 1) {
+                        this.currentImg = this.currentImgResults[1]
+                    }
+                } else {
+                    if (val.length > 0) {
+                        this.currentImg = this.currentImgResults[0]
+                    }
                 }
             },
             immediate: true,

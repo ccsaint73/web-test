@@ -7,7 +7,7 @@
                     'txt-ratio-item': true,
                     'txt-ratio-active': active === idx,
                 }"
-                @click="handleClick(idx)"
+                @click="handleClick(idx, item)"
                 v-for="(item, idx) in ratios"
                 :key="idx"
             >
@@ -58,8 +58,10 @@ export default {
         }
     },
     methods: {
-        handleClick(idx) {
+        handleClick(idx, item) {
             this.active = idx
+
+            this.$emit("select", item)
         },
     },
 }

@@ -19,6 +19,11 @@ const routes = [
         path: '/txt2pic',
         name: 'txt2pic',
         component: () => import(/* webpackChunkName: "about" */ '../views/AI/Text2Pic')
+    },
+    {
+        path: '/test',
+        name: 'test',
+        component: () => import(/* webpackChunkName: "about" */ '../views/Test')
     }
 ]
 

@@ -5,7 +5,7 @@
         </div>
 
         <div class="bjy-ext-main">
-            <BjyExtCanvas :loading.sync="loading" :currentImage="currentImage" />
+            <BjyExtCanvas :loading.sync="loading" :currentImage="currentImage" extend />
         </div>
 
         <div class="bjy-ext-history">
@@ -33,9 +33,6 @@ export default {
             loading: false,
             currentImage: {},
             itl: null,
-            ticket: "",
-            signature: "",
-            appId: "",
             id: "",
             taskId: "",
         }

@@ -8,13 +8,13 @@
                 resize="none"
                 :autosize="{ minRows: 4, maxRows: 6 }"
                 placeholder="请输入提示词"
-                v-model="txt"
+                v-model="prompt"
                 @input="handleInput"
             ></el-input>
 
             <div class="txt-pmt-bottom">
-                <div class="txt-pmt-count">0/800</div>
-                <div class="txt-pmt-clear">清空</div>
+                <div class="txt-pmt-count">{{ prompt.length }}/200</div>
+                <div class="txt-pmt-clear" @click="handleClear">清空</div>
             </div>
         </div>
     </div>
@@ -24,11 +24,18 @@
 export default {
     data() {
         return {
-            txt: "",
+            prompt: "",
         }
     },
     methods: {
-        handleInput() {},
+        handleInput() {
+            this.$emit("change", this.prompt)
+        },
+        handleClear() {
+            this.prompt = ""
+
+            this.$emit("change", this.prompt)
+        },
     },
 }
 </script>
