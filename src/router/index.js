@@ -13,10 +13,12 @@ const routes = [
     {
         path: '/ext',
         name: 'ext',
-        // route level code-splitting
-        // this generates a separate chunk (about.[hash].js) for this route
-        // which is lazy-loaded when the route is visited.
         component: () => import(/* webpackChunkName: "about" */ '../views/AI/Extend')
+    },
+    {
+        path: '/txt2pic',
+        name: 'txt2pic',
+        component: () => import(/* webpackChunkName: "about" */ '../views/AI/Text2Pic')
     }
 ]
 

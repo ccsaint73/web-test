@@ -20,8 +20,6 @@ import BjyExtCanvas from "../components/BjyAiCanvas.vue"
 import BjyAIHistory from "../components/BjyAiHistory.vue"
 
 import { getImageExtProgress, getImageExtHistory } from "../service"
-import { getToken } from "@/utils/auth"
-import { getTicketDetail } from "@/api/home"
 
 export default {
     components: {
@@ -60,71 +58,38 @@ export default {
         handleSubmit() {
             // 制作中
             this.loading = true
-
-            // 获取制作进度
-            this.getImageExtProgress()
-            this.getImageExtHistory()
         },
         getImageExtProgress() {
             if (this.id && this.taskId) {
                 clearInterval(this.itl)
 
                 this.itl = setInterval(() => {
-                    const params = {
-                        token: getToken(),
-                        user_id: this.user_id,
-                        type: "bjc_digital",
-                    }
-
-                    getTicketDetail(params)
-                        .then((response) => {
-                            const ticket = response.data.ticket
-                            const signature = response.data.signature
-                            const appId = response.data.app_id
-
-                            getImageExtProgress(this.id, this.taskId, ticket, signature, appId)
-                                .then((res) => {
-                                    if (res.code === 200 && res.data) {
-                                        if (res.data.status === 0) {
-                                            this.loading = true
-                                        } else {
-                                            this.loading = false
-                                            this.getImageExtHistory()
-                                            clearInterval(this.itl)
-                                        }
-                                    }
-                                })
-                                .catch((err) => {
+                    getImageExtProgress(this.id, this.taskId)
+                        .then((res) => {
+                            if (res.code === 200 && res.data) {
+                                if (res.data.status === 0) {
+                                    this.loading = true
+                                } else {
+                                    this.loading = false
+                                    this.getImageExtHistory()
                                     clearInterval(this.itl)
-                                })
+                                }
+                            }
                         })
-                        .catch(() => {
-                            this.getImageExtProgress()
+                        .catch((err) => {
+                            clearInterval(this.itl)
                         })
                 }, 10000)
             }
         },
         getImageExtHistory() {
-            const params = {
-                token: getToken(),
-                user_id: this.user_id,
-                type: "bjc_digital",
-            }
-
-            getTicketDetail(params).then((res) => {
-                const ticket = res.data.ticket
-                const signature = res.data.signature
-                const appId = res.data.app_id
-
-                getImageExtHistory(ticket, signature, appId).then((res) => {
-                    if (res.code === 200) {
-                        this.history = res.data.items
-
-                        if (this.history.length > 0) {
-                            this.currentImage = this.history[0]
-                        }
+            getImageExtHistory().then((res) => {
+                if (res.code === 200) {
+                    this.history = res.data.items
+                    if (this.history.length > 0) {
+                        this.currentImage = this.history[0]
                     }
-                })
+                }
             })
         },
     },

@@ -94,24 +94,12 @@ export default {
 
             this.$emit("update:loading", true)
 
-            const tp = {
-                token: getToken(),
-                user_id: this.user_id,
-                type: "bjc_digital",
-            }
+            handleImageExt(params).then((res) => {
+                if (res.code === 200) {
+                    this.$emit("refresh", res.data.id, res.data.taskId)
+                }
 
-            getTicketDetail(tp).then((res) => {
-                const ticket = res.data.ticket
-                const signature = res.data.signature
-                const appId = res.data.app_id
-
-                handleImageExt(params, ticket, signature, appId).then((res) => {
-                    if (res.code === 200) {
-                        this.$emit("refresh", res.data.id, res.data.taskId)
-                    }
-
-                    this.$emit("submit")
-                })
+                this.$emit("submit")
             })
         },
         handleNumChange(generateNum) {
