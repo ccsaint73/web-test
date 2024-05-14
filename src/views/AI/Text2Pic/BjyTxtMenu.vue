@@ -29,7 +29,7 @@ export default {
         return {
             params: {
                 ratio: "4:3",
-                generateNum: 2,
+                generateNum: 1,
                 type: 1,
                 prompt: "",
             },

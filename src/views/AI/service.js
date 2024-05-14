@@ -88,7 +88,7 @@ export const handleTxt2Img = (params) => {
 
 
 // 获取历史记录
-export const getTxt2ImgHistory = () => {
+export const getTxt2ImgHistory = (type = 1) => {
 
     return new Promise((resolve, reject) => {
         getTicketDetail(params).then((response) => {
@@ -98,7 +98,7 @@ export const getTxt2ImgHistory = () => {
 
             const suffix = `ticket=${ticket}&signature=${signature}&app_id=${app_id}`
 
-            get(`${baseUrl}/txt2img/_search?orderBy=createTime desc&${suffix}`).then(res => resolve(res))
+            get(`${baseUrl}/txt2img/_search?orderBy=createTime desc&type=${type}&${suffix}`).then(res => resolve(res))
         })
     })
 }

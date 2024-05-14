@@ -1,53 +1,103 @@
 <template>
-    <div class="bjy-pic">
-        <div class="bjy-pic-menu">
-            <BjyPicMenu @submit="handleSubmit" />
+    <div class="bjy-txt">
+        <div class="bjy-txt-menu">
+            <BjyPicMenu @submit="handleSubmit" :loading.sync="loading" @refresh="handleRefresh" />
         </div>
 
-        <div class="bjy-pic-main">
-            <BjyAiCanvas />
+        <div class="bjy-txt-main">
+            <BjyPicCanvas :loading.sync="loading" :currentImage="currentImage" />
         </div>
 
-        <div class="bjy-pic-history">
-            <BjyAiHistory />
+        <div class="bjy-txt-history">
+            <BjyPicHistory :dataSource="history" @select="handleSelect" />
         </div>
     </div>
 </template>
 
 <script>
-import { getImageExtProgress, getImageExtHistory } from "../service"
+import BjyPicMenu from "./BjyPicMenu.vue"
+import BjyPicCanvas from "../components/BjyAiCanvas.vue"
+import BjyPicHistory from "../components/BjyAiHistory.vue"
+
+import { getTxt2ImgProgress, getTxt2ImgHistory } from "../service"
 
 export default {
+    components: {
+        BjyPicMenu,
+        BjyPicCanvas,
+        BjyPicHistory,
+    },
     data() {
         return {
             history: [],
+            loading: false,
+            currentImage: {},
+            itl: null,
+            id: "",
+            taskId: "",
         }
     },
     mounted() {
-        getImageExtHistory().then((res) => {
-            if (res.code === 200) {
-                this.history = res.data.items
-            }
-        })
-
-        // getImageExtProgress().then((res) => {
-        //     console.log(res)
-        // })
+        this.getTxt2ImgProgress()
+        this.getTxt2ImgHistory()
     },
     methods: {
-        handleSubmit() {},
+        handleSelect(currentImage) {
+            this.currentImage = currentImage
+        },
+        handleRefresh(id, taskId) {
+            this.id = id
+            this.taskId = taskId
+
+            this.getTxt2ImgProgress()
+            this.getTxt2ImgHistory()
+        },
+        handleSubmit() {
+            // 制作中
+            this.loading = true
+        },
+        getTxt2ImgProgress() {
+            if (this.id && this.taskId) {
+                clearInterval(this.itl)
+
+                this.itl = setInterval(() => {
+                    getTxt2ImgProgress(this.id, this.taskId)
+                        .then((res) => {
+                            if (res.code === 200 && res.data) {
+                                if (res.data.status === 0) {
+                                    this.loading = true
+                                } else {
+                                    this.loading = false
+                                    this.getTxt2ImgHistory()
+                                    clearInterval(this.itl)
+                                }
+                            }
+                        })
+                        .catch((err) => {
+                            clearInterval(this.itl)
+                        })
+                }, 10000)
+            }
+        },
+        getTxt2ImgHistory() {
+            getTxt2ImgHistory(2).then((res) => {
+                if (res.code === 200) {
+                    this.history = res.data.items
+                    if (this.history.length > 0) {
+                        this.currentImage = this.history[0]
+                    }
+                }
+            })
+        },
+    },
+    beforeDestroy() {
+        clearInterval(this.itl)
     },
 }
 </script>
 
-<script setup>
-import BjyPicMenu from "./BjyPicMenu.vue"
-import BjyAiCanvas from "../components/BjyAiCanvas.vue"
-import BjyAiHistory from "../components/BjyAiHistory.vue"
-</script>
-
 <style scoped lang="scss">
-.bjy-pic {
+.bjy-txt {
     height: 100%;
     display: flex;
     overflow: hidden;
