@@ -23,8 +23,6 @@
 
 <script>
 import { handleUpload } from "../service"
-import { getToken } from "@/utils/auth"
-import { getTicketDetail } from "@/api/home"
 
 export default {
     data() {
@@ -41,27 +39,15 @@ export default {
             const file = res.file
 
             try {
-                const params = {
-                    token: getToken(),
-                    user_id: this.user_id,
-                    type: "bjc_digital",
+                const response = await handleUpload(file)
+
+                if (response.data && response.data != "") {
+                    this.url = response.data
+
+                    this.$emit("upload", response.data)
                 }
 
-                getTicketDetail(params).then(async (res) => {
-                    const ticket = res.data.ticket
-                    const signature = res.data.signature
-                    const appId = res.data.app_id
-
-                    const response = await handleUpload(file, ticket, signature, appId)
-
-                    if (response.data && response.data != "") {
-                        this.url = response.data
-
-                        this.$emit("upload", response.data)
-                    }
-
-                    this.loading = false
-                })
+                this.loading = false
             } catch (error) {
                 this.loading = false
             }

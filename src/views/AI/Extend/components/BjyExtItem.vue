@@ -1,7 +1,7 @@
 <template>
     <div class="ext-item">
         <div class="ext-item-top">
-            <div>{{ title }}</div>
+            <div class="ext-item-title">{{ title }}</div>
 
             <el-input
                 style="width: 120px"
@@ -49,7 +49,7 @@ export default {
     },
     methods: {
         handleChange() {
-            if (this.ratio > 100 && this.ratio < 200) {
+            if (this.ratio >= 100 && this.ratio <= 200) {
                 this.ratioNum = parseInt(this.ratio)
                 this.$emit("change", this.ratioNum)
             }
@@ -76,6 +76,10 @@ export default {
         display: flex;
         justify-content: space-between;
         align-items: center;
+    }
+
+    &-title {
+        font-size: 14px;
     }
 }
 

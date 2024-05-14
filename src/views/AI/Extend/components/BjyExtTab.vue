@@ -22,13 +22,19 @@
         </div>
 
         <div class="ext-tab-pane">
-            <BjyExtItem v-show="type === 'ratio'" @change="handleRatioChange" unit="%"></BjyExtItem>
+            <BjyExtItem
+                v-show="type === 'ratio'"
+                title="百分比"
+                @change="handleRatioChange"
+                unit="%"
+            ></BjyExtItem>
 
             <BjyExtItem
                 v-show="type !== 'ratio'"
                 unit="PX"
                 v-for="item in options"
                 :key="item.label"
+                :title="item.label"
                 @change="(val) => handlePxChange(item.key, val)"
             ></BjyExtItem>
         </div>
@@ -38,9 +44,9 @@
 <script>
 import BjyExtItem from "./BjyExtItem.vue"
 export default {
-  components:{
-    BjyExtItem
-   },
+    components: {
+        BjyExtItem,
+    },
     data() {
         return {
             type: "ratio",
@@ -89,7 +95,6 @@ export default {
     },
 }
 </script>
-
 
 <style scoped lang="scss">
 .ext-tab {

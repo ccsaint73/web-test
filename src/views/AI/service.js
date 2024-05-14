@@ -7,18 +7,26 @@ import { getTicketDetail } from "@/api/home"
 
 const baseUrl = 'https://szr.beijingcloud.com.cn/api/mt'
 
-const params = {
+const tp = {
     token: getToken(),
     type: "bjc_digital",
 }
 
-export const handleUpload = (file, ticket, signature, app_id) => {
-    const suffix = `ticket=${ticket}&signature=${signature}&app_id=${app_id}`
+export const handleUpload = (file) => {
+    return new Promise((resolve, reject) => {
+        getTicketDetail(tp).then((response) => {
+            const ticket = response.data.ticket
+            const signature = response.data.signature
+            const app_id = response.data.app_id
 
-    return fmPost(`${baseUrl}/upload?${suffix}`, { file }, {
-        headers: {
-            'Content-Type': 'multipart/form-data'
-        }
+            const suffix = `ticket=${ticket}&signature=${signature}&app_id=${app_id}`
+
+            fmPost(`${baseUrl}/upload?${suffix}`, { file }, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            }).then(res => resolve(res))
+        })
     })
 }
 
@@ -26,7 +34,7 @@ export const handleUpload = (file, ticket, signature, app_id) => {
 export const handleImageExt = (params) => {
 
     return new Promise((resolve, reject) => {
-        getTicketDetail(params).then((response) => {
+        getTicketDetail(tp).then((response) => {
             const ticket = response.data.ticket
             const signature = response.data.signature
             const app_id = response.data.app_id
@@ -42,7 +50,7 @@ export const handleImageExt = (params) => {
 export const getImageExtProgress = (id, taskId) => {
 
     return new Promise((resolve, reject) => {
-        getTicketDetail(params).then((response) => {
+        getTicketDetail(tp).then((response) => {
             const ticket = response.data.ticket
             const signature = response.data.signature
             const app_id = response.data.app_id
@@ -58,7 +66,7 @@ export const getImageExtProgress = (id, taskId) => {
 export const getImageExtHistory = () => {
 
     return new Promise((resolve, reject) => {
-        getTicketDetail(params).then((response) => {
+        getTicketDetail(tp).then((response) => {
             const ticket = response.data.ticket
             const signature = response.data.signature
             const app_id = response.data.app_id
@@ -74,7 +82,7 @@ export const getImageExtHistory = () => {
 export const handleTxt2Img = (params) => {
 
     return new Promise((resolve, reject) => {
-        getTicketDetail(params).then((response) => {
+        getTicketDetail(tp).then((response) => {
             const ticket = response.data.ticket
             const signature = response.data.signature
             const app_id = response.data.app_id
@@ -91,7 +99,7 @@ export const handleTxt2Img = (params) => {
 export const getTxt2ImgHistory = (type = 1) => {
 
     return new Promise((resolve, reject) => {
-        getTicketDetail(params).then((response) => {
+        getTicketDetail(tp).then((response) => {
             const ticket = response.data.ticket
             const signature = response.data.signature
             const app_id = response.data.app_id
@@ -106,7 +114,7 @@ export const getTxt2ImgHistory = (type = 1) => {
 export const getTxt2ImgProgress = (id, taskId) => {
 
     return new Promise((resolve, reject) => {
-        getTicketDetail(params).then((response) => {
+        getTicketDetail(tp).then((response) => {
             const ticket = response.data.ticket
             const signature = response.data.signature
             const app_id = response.data.app_id
@@ -121,7 +129,7 @@ export const getTxt2ImgProgress = (id, taskId) => {
 export const getImageProgress = async (id, taskId) => {
 
     try {
-        const res = await getTicketDetail(params)
+        const res = await getTicketDetail(tp)
 
         const { ticket, signature, app_id } = res.data
 
