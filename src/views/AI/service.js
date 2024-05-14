@@ -117,3 +117,20 @@ export const getTxt2ImgProgress = (id, taskId) => {
         })
     })
 }
+
+export const getImageProgress = async (id, taskId) => {
+
+    try {
+        const res = await getTicketDetail(params)
+
+        const { ticket, signature, app_id } = res.data
+
+        const suffix = `ticket=${ticket}&signature=${signature}&app_id=${app_id}`
+
+        const response = await get(`${baseUrl}/txt2img/getResult?taskId=${taskId}&id=${id}&${suffix}`)
+
+        return response
+    } catch (error) {
+        console.log(error)
+    }
+}

@@ -78,8 +78,6 @@ export default {
                         const offsetWidth = this.$refs.imgBox.offsetWidth
                         const offsetHeight = this.$refs.imgBox.offsetHeight
 
-                        console.log(offsetWidth, offsetHeight)
-
                         if (offsetWidth / offsetHeight > size.width / size.height) {
                             this.size.height = offsetHeight
                             this.size.width = (size.width / size.height) * offsetHeight
@@ -107,8 +105,6 @@ export default {
         },
         currentImgResults: {
             handler(val) {
-                console.log(this.extend)
-
                 if (this.extend) {
                     if (val.length > 1) {
                         this.currentImg = this.currentImgResults[1]

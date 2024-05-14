@@ -5,7 +5,7 @@
         </div>
 
         <div class="bjy-txt-main">
-            <BjyPicCanvas :loading.sync="loading" :currentImage="currentImage" />
+            <BjyPicCanvas :loading.sync="loading" :currentImage="currentImage" extend />
         </div>
 
         <div class="bjy-txt-history">

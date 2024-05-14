@@ -15,11 +15,11 @@
         </div>
         <div class="ext-item-bottom">
             <el-slider
-                v-model="ratio"
+                v-model="ratioNum"
                 :show-tooltip="false"
                 :min="100"
                 :max="200"
-                @change="handleChange"
+                @change="handleNumChange"
             ></el-slider>
         </div>
     </div>
@@ -43,12 +43,21 @@ export default {
     },
     data() {
         return {
-            ratio: 125,
+            ratio: "125",
+            ratioNum: 125,
         }
     },
     methods: {
         handleChange() {
-            this.$emit("change", this.ratio)
+            if (this.ratio > 100 && this.ratio < 200) {
+                this.ratioNum = parseInt(this.ratio)
+                this.$emit("change", this.ratioNum)
+            }
+        },
+        handleNumChange() {
+            this.ratio = `${this.ratioNum}`
+
+            this.$emit("change", this.ratioNum)
         },
     },
     watch: {
