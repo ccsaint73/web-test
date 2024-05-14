@@ -8,7 +8,17 @@
             <BjyAiNum @change="handleNumChange" />
         </div>
 
-        <div class="ext-menu-submit" @click="handleSubmit">开始生成图片</div>
+        <div
+            :class="{
+                'ext-menu-submit': true,
+                'ext-menu-disabled': loading,
+            }"
+            @click="handleSubmit"
+        >
+            <i v-if="loading" class="el-icon-loading"></i>
+
+            开始生成图片
+        </div>
     </div>
 </template>
 
@@ -17,8 +27,6 @@ import BjyAiUpload from "../components/BjyAiUpload.vue"
 import BjyAiNum from "../components/BjyAiNum.vue"
 import BjyExtTab from "./components/BjyExtTab.vue"
 
-import { getToken } from "@/utils/auth"
-import { getTicketDetail } from "@/api/home"
 import { handleImageExt } from "../service"
 
 export default {
@@ -26,6 +34,12 @@ export default {
         BjyAiUpload,
         BjyAiNum,
         BjyExtTab,
+    },
+    props: {
+        loading: {
+            type: Boolean,
+            default: false,
+        },
     },
     data() {
         return {
@@ -69,6 +83,10 @@ export default {
             this.params.prompt = prompt
         },
         handleSubmit() {
+            if (this.loading) {
+                return
+            }
+
             if (!this.params.imgUrl || this.params.imgUrl === "") {
                 this.$message.error("请上传图片")
 
@@ -147,6 +165,11 @@ export default {
         align-items: center;
         font-size: 16px;
         cursor: pointer;
+    }
+
+    &-disabled {
+        background-color: #e79090;
+        cursor: not-allowed;
     }
 }
 </style>

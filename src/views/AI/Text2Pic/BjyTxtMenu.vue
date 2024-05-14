@@ -8,7 +8,17 @@
             <BjyAiNum @change="handleNumChange" />
         </div>
 
-        <div class="txt-menu-submit" @click="handleSubmit">开始生成图片</div>
+        <div
+            :class="{
+                'txt-menu-submit': true,
+                'txt-menu-disabled': loading,
+            }"
+            @click="handleSubmit"
+        >
+            <i v-if="loading" class="el-icon-loading"></i>
+
+            开始生成图片
+        </div>
     </div>
 </template>
 
@@ -24,6 +34,12 @@ export default {
         BjyTxtPrompt,
         BjyTxtRatio,
         BjyAiNum,
+    },
+    props: {
+        loading: {
+            type: Boolean,
+            default: false,
+        },
     },
     data() {
         return {
@@ -46,6 +62,10 @@ export default {
             this.params.generateNum = generateNum
         },
         handleSubmit() {
+            if (this.loading) {
+                return
+            }
+
             if (!this.params.prompt || this.params.prompt === "") {
                 this.$message.error("请输入提示词")
 
@@ -95,6 +115,11 @@ export default {
         align-items: center;
         font-size: 16px;
         cursor: pointer;
+    }
+
+    &-disabled {
+        background-color: #e79090;
+        cursor: not-allowed;
     }
 }
 </style>

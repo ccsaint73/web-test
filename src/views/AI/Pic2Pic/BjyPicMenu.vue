@@ -10,7 +10,17 @@
             <BjyAiNum @change="handleNumChange" />
         </div>
 
-        <div class="pic-menu-submit" @click="handleSubmit">开始生成图片</div>
+        <div
+            :class="{
+                'pic-menu-submit': true,
+                'pic-menu-disabled': loading,
+            }"
+            @click="handleSubmit"
+        >
+            <i v-if="loading" class="el-icon-loading"></i>
+
+            开始生成图片
+        </div>
     </div>
 </template>
 
@@ -28,6 +38,12 @@ export default {
         BjyAiPrompt,
         BjyAiRatio,
         BjyAiNum,
+    },
+    props: {
+        loading: {
+            type: Boolean,
+            default: false,
+        },
     },
     data() {
         return {
@@ -54,6 +70,10 @@ export default {
             this.params.ratio = item.title
         },
         handleSubmit() {
+            if (this.loading) {
+                return
+            }
+
             if (!this.params.imgUrl || this.params.imgUrl === "") {
                 this.$message.error("请上传图片")
 
@@ -111,6 +131,11 @@ export default {
         align-items: center;
         font-size: 16px;
         cursor: pointer;
+    }
+
+    &-disabled {
+        background-color: #e79090;
+        cursor: not-allowed;
     }
 }
 </style>

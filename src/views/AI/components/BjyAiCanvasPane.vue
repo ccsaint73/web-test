@@ -144,11 +144,15 @@ export default {
 
     &-tab {
         flex-shrink: 0;
-        height: 120px;
         padding-top: 24px;
         width: 100%;
         overflow-x: scroll;
+        overflow-y: hidden;
         display: flex;
+
+        &::-webkit-scrollbar {
+            width: 0px;
+        }
 
         .tab-inner {
             display: flex;
